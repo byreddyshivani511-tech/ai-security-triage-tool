@@ -1,0 +1,26 @@
+name: Security Scan and AI Triage
+
+on: [push]
+
+jobs:
+  scan-and-triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install semgrep groq fastapi uvicorn sqlalchemy
+
+      - name: Run Semgrep scan
+        run: semgrep scan --config auto . --json > findings.json
+
+      - name: Run AI triage
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python3 triage.py
