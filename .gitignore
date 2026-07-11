@@ -1,0 +1,5 @@
+triage.db
+findings.json
+flask/
+__pycache__/
+*.pyc
